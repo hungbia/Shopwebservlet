@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//WebContent/views/admin/common/header.jsp=UTF-8
+encoding//src/com/trungtamjava/controller/ResgisterCategoryController.java=UTF-8
+encoding//src/com/trungtamjava/controller/ResgisterProductController.java=UTF-8
+encoding//src/com/trungtamjava/controller/admin/Login.java=UTF-8

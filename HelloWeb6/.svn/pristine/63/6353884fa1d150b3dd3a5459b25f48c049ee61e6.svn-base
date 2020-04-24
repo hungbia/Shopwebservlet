@@ -1,0 +1,114 @@
+package com.trungtamjava.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.trungtamjava.model.Product;
+
+public class ProductDaoImpl implements ProductDao {
+
+	@Override
+	public void add(Product product) {
+		try {
+			Connection conn = JDBCConnection.getConn();
+			String sql = "insert into product(name,price,category_id) values(?,?,?)";
+			PreparedStatement p = conn.prepareStatement(sql);
+			p.setString(1, product.getName());
+			p.setInt(2, product.getPrice());
+			p.setInt(3, product.getCategoryId());
+			p.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("loi " + e);
+		}
+	}
+
+	@Override
+	public void update(Product product) {
+		try {
+			Connection conn = JDBCConnection.getConn();
+			String sql = "update product set name=?,price=?,category_id=? where id=?";
+			PreparedStatement p = conn.prepareStatement(sql);
+			p.setString(1, product.getName());
+			p.setInt(2, product.getPrice());
+			p.setInt(3, product.getCategoryId());
+			p.setInt(4, product.getId());
+			p.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("loiupdate " + e);
+		}
+	}
+
+	@Override
+	public Product getProduct(int id) {
+		try {
+			Connection conn = JDBCConnection.getConn();
+			String sql = "select * from product where id=?";
+			PreparedStatement p = conn.prepareStatement(sql);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			while (rs.next()) {
+				int pId = rs.getInt("id");
+				String name = rs.getString("name");
+				int price = rs.getInt("price");
+				int categoryId = rs.getInt("category_id");
+				Product product = new Product();
+				product.setId(pId);
+				product.setName(name);
+				product.setPrice(price);
+				product.setCategoryId(categoryId);
+				return product;
+			}
+		} catch (Exception e) {
+			System.out.println("loi " + e);
+		}
+		return null;
+	}
+
+	@Override
+	public void delete(int id) {
+		try {
+			Connection conn = JDBCConnection.getConn();
+
+			String sql = "delete from product where id=?";
+			PreparedStatement p = conn.prepareStatement(sql);
+			p = conn.prepareStatement(sql);
+			p.setInt(1, id);
+			p.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("loi delete" + e);
+		}
+	}
+
+	@Override
+	public List<Product> search(String name) {
+		List<Product> list = new ArrayList<Product>();
+		Connection conn = JDBCConnection.getConn();
+		try {
+			String sql = "select * from product where name like ?";
+			PreparedStatement p = conn.prepareStatement(sql);
+			p = conn.prepareStatement(sql);
+			p.setString(1, "%" + name + "%");
+			ResultSet rs = p.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String nameP = rs.getString("name");
+				int price = rs.getInt("price");
+				int categoryId = rs.getInt("category_id");
+				Product product = new Product();
+				product.setId(id);
+				product.setName(nameP);
+				product.setPrice(price);
+				product.setCategoryId(categoryId);
+				list.add(product);
+			}
+
+		} catch (Exception e) {
+			System.out.println("loi" + e);
+		}
+		return list;
+	}
+
+}

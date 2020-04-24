@@ -1,0 +1,45 @@
+package com.trungtamjava.controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.trungtamjava.dao.ProductDao;
+import com.trungtamjava.dao.ProductDaoImpl;
+import com.trungtamjava.model.Product;
+
+@WebServlet(urlPatterns = "/product/dang-ky")
+public class ResgisterProductController extends HttpServlet {
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/views/dangky-product.jsp");
+		dispatcher.forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Ä‘oc du lieu tu form gui len
+		String name = req.getParameter("name");
+		String prince = req.getParameter("price");
+		String categoryId = req.getParameter("categoryId");
+
+		System.out.println(name);
+		System.out.println(prince);
+		System.out.println(categoryId);
+
+		Product product = new Product();
+		ProductDao productDao = new ProductDaoImpl();
+		product.setName(name);
+		product.setPrice(Integer.parseInt(prince));
+		product.setCategoryId(Integer.parseInt(categoryId));
+		productDao.add(product);
+		resp.sendRedirect("/HelloWeb6/product/dang-ky");
+		System.out.println("đăng ký thành công");
+
+	}
+}
